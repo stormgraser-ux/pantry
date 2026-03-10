@@ -1,0 +1,790 @@
+/* Pantry — Dark mobile-first CSS */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #222;
+  --border: #2a2a2a;
+  --accent: #4ade80;
+  --accent-dim: #166534;
+  --warning: #fbbf24;
+  --warning-dim: #78350f;
+  --danger: #f87171;
+  --text: #f5f5f5;
+  --text2: #888;
+  --nav-height: 64px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html, body {
+  height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+/* ── Layout ─────────────────────────────────────────── */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+.view {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+  -webkit-overflow-scrolling: touch;
+}
+
+.view.active {
+  display: block;
+}
+
+/* ── Bottom Nav ─────────────────────────────────────── */
+#bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--nav-height) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: stretch;
+  z-index: 100;
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 8px 4px;
+  min-height: 48px;
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-btn.active {
+  color: var(--accent);
+}
+
+.nav-btn .nav-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* ── Section headers ────────────────────────────────── */
+.section-header {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  padding: 12px 16px 6px;
+  font-size: 11px;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--text2);
+  border-bottom: 1px solid var(--border);
+  z-index: 10;
+}
+
+/* ── List items ─────────────────────────────────────── */
+.list-item {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s;
+}
+
+.list-item:active {
+  background: var(--surface2);
+}
+
+.list-item.checked {
+  opacity: 0.4;
+}
+
+.list-item.checked .item-name {
+  text-decoration: line-through;
+  color: var(--text2);
+}
+
+/* Custom checkbox */
+.checkbox {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.15s;
+  background: transparent;
+}
+
+.checkbox.checked {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+}
+
+.item-name {
+  flex: 1;
+  font-size: 16px;
+}
+
+.item-section-chip {
+  font-size: 11px;
+  color: var(--text2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+/* ── FAB ────────────────────────────────────────────── */
+.fab {
+  position: fixed;
+  bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 50%;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 90;
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fab:active {
+  transform: scale(0.93);
+  box-shadow: 0 2px 8px rgba(74, 222, 128, 0.2);
+}
+
+/* ── Bottom Sheet ───────────────────────────────────── */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: none;
+  align-items: flex-end;
+}
+
+.sheet-backdrop.open {
+  display: flex;
+}
+
+.sheet {
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-height: 80dvh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(var(--safe-bottom) + 16px);
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 12px auto 16px;
+}
+
+.sheet-title {
+  font-size: 17px;
+  font-weight: 600;
+  padding: 0 16px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sheet-body {
+  overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Search ─────────────────────────────────────────── */
+.search-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-size: 16px;
+  margin: 12px 16px;
+  width: calc(100% - 32px);
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+}
+
+/* ── Buttons ────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s;
+}
+
+.btn:active { background: var(--border); }
+
+.btn-accent {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+
+.btn-accent:active { background: #38c36a; }
+
+.btn-warning {
+  background: var(--warning-dim);
+  color: var(--warning);
+  border-color: var(--warning);
+}
+
+.btn-warning:active { background: #92400e; }
+
+.btn-success {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.btn-success:active { background: #14532d; }
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.btn-danger:active { background: rgba(248, 113, 113, 0.1); }
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text2);
+}
+
+/* ── Toolbar row ────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.toolbar-title {
+  font-size: 20px;
+  font-weight: 700;
+  flex: 1;
+}
+
+/* ── Empty state ────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 64px 24px;
+  color: var(--text2);
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 48px;
+  opacity: 0.5;
+}
+
+.empty-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.empty-desc {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Pantry item row ────────────────────────────────── */
+.pantry-item {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  gap: 10px;
+}
+
+.pantry-item-name {
+  flex: 1;
+  font-size: 16px;
+}
+
+.pantry-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.pantry-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 36px;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.pantry-btn-low {
+  background: var(--warning-dim);
+  color: var(--warning);
+  border-color: var(--warning);
+}
+
+.pantry-btn-stock {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ── Toggle filter ──────────────────────────────────── */
+.toggle-group {
+  display: flex;
+  gap: 0;
+  padding: 12px 16px;
+  background: var(--bg);
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s;
+}
+
+.toggle-btn:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.toggle-btn:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.toggle-btn.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+
+/* ── Recipe cards ───────────────────────────────────── */
+.recipe-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin: 12px 16px;
+  overflow: hidden;
+}
+
+.recipe-card-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  gap: 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.recipe-card-name {
+  flex: 1;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.recipe-card-chevron {
+  color: var(--text2);
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.recipe-card.expanded .recipe-card-chevron {
+  transform: rotate(180deg);
+}
+
+.recipe-card-body {
+  display: none;
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.recipe-card.expanded .recipe-card-body {
+  display: block;
+}
+
+.ingredient-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.ingredient-row:last-child {
+  border-bottom: none;
+}
+
+.ingredient-stock {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ingredient-stock.in-stock { background: var(--accent); }
+.ingredient-stock.out-of-stock { background: var(--warning); }
+.ingredient-stock.unknown { background: var(--text2); }
+
+.ingredient-name {
+  flex: 1;
+}
+
+.ingredient-qty {
+  color: var(--text2);
+  font-size: 13px;
+}
+
+/* ── Meal plan week ─────────────────────────────────── */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 12px 16px;
+}
+
+.day-slot {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 4px;
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.day-label {
+  font-size: 11px;
+  color: var(--text2);
+  font-variant: small-caps;
+}
+
+.day-recipe {
+  font-size: 11px;
+  color: var(--accent);
+  word-break: break-word;
+  text-align: center;
+}
+
+.day-remove {
+  font-size: 16px;
+  color: var(--text2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+/* ── Settings ───────────────────────────────────────── */
+.settings-section {
+  padding: 16px;
+}
+
+.settings-title {
+  font-size: 13px;
+  font-variant: small-caps;
+  color: var(--text2);
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.section-row {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+.section-row-name {
+  flex: 1;
+  font-size: 15px;
+}
+
+.section-order-btn {
+  width: 32px;
+  height: 32px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text2);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.section-order-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ── Select ─────────────────────────────────────────── */
+.select-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-size: 16px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.select-input:focus {
+  border-color: var(--accent);
+}
+
+.input-group {
+  padding: 8px 16px;
+}
+
+.input-label {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+
+.text-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-size: 16px;
+  outline: none;
+}
+
+.text-input:focus {
+  border-color: var(--accent);
+}
+
+/* ── Sheet footer ───────────────────────────────────── */
+.sheet-footer {
+  padding: 12px 16px 0;
+  display: flex;
+  gap: 8px;
+}
+
+.sheet-footer .btn {
+  flex: 1;
+}
+
+/* ── iOS install banner ─────────────────────────────── */
+#ios-banner {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+#ios-banner-dismiss {
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  margin-left: auto;
+}
+
+/* ── Clear checked bar ──────────────────────────────── */
+#clear-checked-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 50;
+}
+
+#clear-checked-bar.visible {
+  display: flex;
+}
+
+#clear-checked-bar .label {
+  font-size: 14px;
+  color: var(--text2);
+}
+
+/* ── Loading state ──────────────────────────────────── */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  color: var(--text2);
+  font-size: 14px;
+  gap: 8px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Toast ──────────────────────────────────────────── */
+#toast {
+  position: fixed;
+  bottom: calc(var(--nav-height) + var(--safe-bottom) + 80px);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 14px;
+  color: var(--text);
+  z-index: 500;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Misc utilities ─────────────────────────────────── */
+.w-full { width: 100%; }
+.text-danger { color: var(--danger); }
+.text-warning { color: var(--warning); }
+.text-accent { color: var(--accent); }
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.p-16 { padding: 16px; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.font-bold { font-weight: 700; }
+.text-sm { font-size: 14px; }
+.text-xs { font-size: 12px; }
+.text-muted { color: var(--text2); }
+.border-bottom { border-bottom: 1px solid var(--border); }
