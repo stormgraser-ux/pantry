@@ -115,9 +115,14 @@ function buildPantryRow(item) {
   const actions = document.createElement('div');
   actions.className = 'pantry-actions';
 
+  // Status badge
+  const badge = document.createElement('span');
+  badge.className = item.in_stock ? 'status-badge status-in-stock' : 'status-badge status-out';
+  badge.textContent = item.in_stock ? 'In Stock' : 'Out';
+
   const lowBtn = document.createElement('button');
   lowBtn.className = 'pantry-btn pantry-btn-low';
-  lowBtn.textContent = 'Low';
+  lowBtn.textContent = 'Mark Low';
   lowBtn.style.display = item.in_stock ? 'inline-flex' : 'none';
   lowBtn.addEventListener('click', async () => {
     try {
@@ -131,7 +136,7 @@ function buildPantryRow(item) {
 
   const stockBtn = document.createElement('button');
   stockBtn.className = 'pantry-btn pantry-btn-stock';
-  stockBtn.textContent = 'In Stock';
+  stockBtn.textContent = 'Got It';
   stockBtn.style.display = !item.in_stock ? 'inline-flex' : 'none';
   stockBtn.addEventListener('click', async () => {
     try {
@@ -143,12 +148,8 @@ function buildPantryRow(item) {
     }
   });
 
-  // Status indicator dot
-  const dot = document.createElement('span');
-  dot.style.cssText = `width:8px;height:8px;border-radius:50%;background:${item.in_stock ? 'var(--accent)' : 'var(--warning)'};flex-shrink:0`;
-
-  actions.append(lowBtn, stockBtn);
-  row.append(dot, name, chip, actions);
+  actions.append(badge, lowBtn, stockBtn);
+  row.append(name, chip, actions);
   return row;
 }
 
