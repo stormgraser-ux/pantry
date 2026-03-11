@@ -6,29 +6,33 @@
 }
 
 :root {
-  --bg: #0f0f0f;
-  --surface: #1a1a1a;
-  --surface2: #222;
-  --border: #2a2a2a;
+  --bg: #0d0d10;
+  --surface: #17171b;
+  --surface2: #1e1e24;
+  --border: #28282f;
   --accent: #4ade80;
-  --accent-dim: #166534;
+  --accent-dim: #14532d;
+  --accent-glow: rgba(74, 222, 128, 0.15);
   --warning: #fbbf24;
   --warning-dim: #78350f;
   --danger: #f87171;
-  --text: #f5f5f5;
-  --text2: #888;
+  --text: #f0f0f2;
+  --text2: #70707a;
   --nav-height: 64px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --radius: 14px;
 }
 
 html, body {
   height: 100dvh;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ── Layout ─────────────────────────────────────────── */
@@ -79,12 +83,25 @@ html, body {
   cursor: pointer;
   padding: 8px 4px;
   min-height: 48px;
-  transition: color 0.15s;
+  position: relative;
+  transition: color 0.2s;
   -webkit-tap-highlight-color: transparent;
 }
 
 .nav-btn.active {
   color: var(--accent);
+}
+
+/* Indicator dot under active tab */
+.nav-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 2px;
+  opacity: 0.9;
 }
 
 .nav-btn .nav-icon {
@@ -97,12 +114,14 @@ html, body {
   position: sticky;
   top: 0;
   background: var(--bg);
-  padding: 12px 16px 6px;
+  padding: 10px 16px 8px 14px;
   font-size: 11px;
-  font-variant: small-caps;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--text2);
   border-bottom: 1px solid var(--border);
+  border-left: 2px solid var(--accent);
   z-index: 10;
 }
 
@@ -110,13 +129,13 @@ html, body {
 .list-item {
   display: flex;
   align-items: center;
-  min-height: 56px;
+  min-height: 60px;
   padding: 0 16px;
   border-bottom: 1px solid var(--border);
   gap: 12px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: background 0.1s;
+  transition: background 0.1s, opacity 0.25s ease;
 }
 
 .list-item:active {
@@ -124,7 +143,7 @@ html, body {
 }
 
 .list-item.checked {
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
 .list-item.checked .item-name {
@@ -134,16 +153,16 @@ html, body {
 
 /* Custom checkbox */
 .checkbox {
-  width: 24px;
-  height: 24px;
-  min-width: 24px;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
   border: 2px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  transition: all 0.15s;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   background: transparent;
 }
 
@@ -151,6 +170,8 @@ html, body {
   background: var(--accent);
   border-color: var(--accent);
   color: #000;
+  transform: scale(1.08);
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
 }
 
 .item-name {
@@ -179,20 +200,21 @@ html, body {
   color: #000;
   border: none;
   border-radius: 50%;
-  font-size: 28px;
+  font-size: 26px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 90;
-  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
-  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 20px rgba(74, 222, 128, 0.35), 0 2px 8px rgba(0,0,0,0.4);
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
 
 .fab:active {
-  transform: scale(0.93);
-  box-shadow: 0 2px 8px rgba(74, 222, 128, 0.2);
+  transform: scale(0.9);
+  box-shadow: 0 2px 8px rgba(74, 222, 128, 0.2), 0 1px 4px rgba(0,0,0,0.3);
 }
 
 /* ── Bottom Sheet ───────────────────────────────────── */
@@ -212,13 +234,15 @@ html, body {
 
 .sheet {
   background: var(--surface);
-  border-radius: 20px 20px 0 0;
+  border-radius: 22px 22px 0 0;
   width: 100%;
   max-height: 80dvh;
   display: flex;
   flex-direction: column;
   padding-bottom: calc(var(--safe-bottom) + 16px);
-  animation: slideUp 0.25s ease;
+  animation: slideUp 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.5);
+  border-top: 1px solid rgba(255,255,255,0.06);
 }
 
 @keyframes slideUp {
@@ -397,6 +421,12 @@ html, body {
   min-height: 36px;
   -webkit-tap-highlight-color: transparent;
   white-space: nowrap;
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.1s;
+}
+
+.pantry-btn:active {
+  transform: scale(0.92);
+  opacity: 0.85;
 }
 
 .pantry-btn-low {
@@ -433,7 +463,7 @@ html, body {
 /* ── Toggle filter ──────────────────────────────────── */
 .toggle-group {
   display: flex;
-  gap: 0;
+  gap: 6px;
   padding: 12px 16px;
   background: var(--bg);
 }
@@ -447,22 +477,16 @@ html, body {
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  border-radius: 10px;
   -webkit-tap-highlight-color: transparent;
-  transition: all 0.15s;
-}
-
-.toggle-btn:first-child {
-  border-radius: 8px 0 0 8px;
-}
-
-.toggle-btn:last-child {
-  border-radius: 0 8px 8px 0;
+  transition: all 0.18s;
 }
 
 .toggle-btn.active {
   background: var(--accent);
   color: #000;
   border-color: var(--accent);
+  box-shadow: 0 2px 12px rgba(74, 222, 128, 0.3);
 }
 
 /* ── Recipe cards ───────────────────────────────────── */
@@ -768,19 +792,20 @@ html, body {
   position: fixed;
   bottom: calc(var(--nav-height) + var(--safe-bottom) + 80px);
   left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 20px;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--surface2);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 14px;
+  padding: 11px 20px;
   font-size: 14px;
+  font-weight: 500;
   color: var(--text);
   z-index: 500;
   opacity: 0;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
   white-space: nowrap;
   pointer-events: none;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04) inset;
 }
 
 #toast.show {
