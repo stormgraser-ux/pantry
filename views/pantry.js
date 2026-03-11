@@ -115,41 +115,35 @@ function buildPantryRow(item) {
   const actions = document.createElement('div');
   actions.className = 'pantry-actions';
 
-  // Status badge
-  const badge = document.createElement('span');
-  badge.className = item.in_stock ? 'status-badge status-in-stock' : 'status-badge status-out';
-  badge.textContent = item.in_stock ? 'In Stock' : 'Out';
+  const btn = document.createElement('button');
+  if (item.in_stock) {
+    btn.className = 'pantry-btn pantry-btn-low';
+    btn.textContent = 'Running Low';
+    btn.addEventListener('click', async () => {
+      try {
+        await markRunningLow(item.id, item.section_id);
+        showToast(`${item.name} added to list`);
+        await renderPantry();
+      } catch (e) {
+        showToast('Error marking low');
+      }
+    });
+  } else {
+    btn.className = 'pantry-btn pantry-btn-stock';
+    btn.textContent = 'Got It';
+    btn.addEventListener('click', async () => {
+      try {
+        await markInStock(item.id);
+        showToast(`${item.name} marked in stock`);
+        await renderPantry();
+      } catch (e) {
+        showToast('Error marking in stock');
+      }
+    });
+  }
 
-  const lowBtn = document.createElement('button');
-  lowBtn.className = 'pantry-btn pantry-btn-low';
-  lowBtn.textContent = 'Mark Low';
-  lowBtn.style.display = item.in_stock ? 'inline-flex' : 'none';
-  lowBtn.addEventListener('click', async () => {
-    try {
-      await markRunningLow(item.id, item.section_id);
-      showToast(`${item.name} added to list`);
-      await renderPantry();
-    } catch (e) {
-      showToast('Error marking low');
-    }
-  });
-
-  const stockBtn = document.createElement('button');
-  stockBtn.className = 'pantry-btn pantry-btn-stock';
-  stockBtn.textContent = 'Got It';
-  stockBtn.style.display = !item.in_stock ? 'inline-flex' : 'none';
-  stockBtn.addEventListener('click', async () => {
-    try {
-      await markInStock(item.id);
-      showToast(`${item.name} marked in stock`);
-      await renderPantry();
-    } catch (e) {
-      showToast('Error marking in stock');
-    }
-  });
-
-  actions.append(badge, lowBtn, stockBtn);
-  row.append(name, chip, actions);
+  actions.append(btn);
+  row.append(name, actions);
   return row;
 }
 
