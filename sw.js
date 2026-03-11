@@ -1,4 +1,4 @@
-const CACHE = 'pantry-v2';
+const CACHE = 'pantry-v3';
 const SHELL = [
   '/pantry/',
   '/pantry/index.html',
