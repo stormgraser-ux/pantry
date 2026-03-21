@@ -3,6 +3,7 @@ import {
   markRunningLow, markInStock, updateItemSection, deleteItem
 } from '../db.js';
 import { showToast } from '../app.js';
+import { buildOrganicBadge } from '../organic.js';
 
 let _items = [];
 let _sections = [];
@@ -105,6 +106,9 @@ function buildPantryRow(item) {
   name.className = 'pantry-item-name';
   name.textContent = item.name;
 
+  // Organic badge from notes field
+  const organicBadge = buildOrganicBadge(item.notes);
+
   const chip = document.createElement('span');
   chip.className = 'item-section-chip';
   chip.style.cursor = 'pointer';
@@ -143,9 +147,13 @@ function buildPantryRow(item) {
   }
 
   actions.append(btn);
-  row.append(name, actions);
+  row.append(name);
+  if (organicBadge) row.append(organicBadge);
+  row.append(actions);
   return row;
 }
+
+
 
 function openSectionPicker(item) {
   const backdrop = document.getElementById('pantry-section-sheet');

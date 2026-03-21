@@ -58,7 +58,8 @@ export async function getGroceryList() {
       items (
         id,
         name,
-        in_stock
+        in_stock,
+        notes
       ),
       sections (
         id,
@@ -74,6 +75,7 @@ export async function getGroceryList() {
     id: row.id,
     item_id: row.item_id,
     name: row.items?.name || row.ad_hoc_name,
+    notes: row.items?.notes || null,
     section_id: row.section_id,
     section_name: row.sections?.name || 'Unsorted',
     section_sort: row.sections?.sort_order ?? 99,

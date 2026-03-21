@@ -3,6 +3,7 @@ import {
   addToList, addAdHocToList, getPantryItems, getSections
 } from '../db.js';
 import { showToast } from '../app.js';
+import { buildOrganicBadge } from '../organic.js';
 
 let _items = [];
 let _pantryItems = [];
@@ -127,7 +128,10 @@ function createListItemEl(item) {
   removeBtn.textContent = '×';
   removeBtn.style.cssText = 'padding:4px 8px;color:var(--text2);font-size:18px;';
 
-  row.append(cb, name, removeBtn);
+  const badge = buildOrganicBadge(item.notes);
+  row.append(cb, name);
+  if (badge) row.append(badge);
+  row.append(removeBtn);
 
   row.addEventListener('click', async e => {
     if (e.target.closest('.list-remove')) return;

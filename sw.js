@@ -1,4 +1,4 @@
-const CACHE = 'pantry-v4';
+const CACHE = 'pantry-v5';
 const SHELL = [
   '/pantry/',
   '/pantry/index.html',
@@ -7,6 +7,7 @@ const SHELL = [
   '/pantry/realtime.js',
   '/pantry/style.css',
   '/pantry/config.js',
+  '/pantry/organic.js',
   '/pantry/views/list.js',
   '/pantry/views/pantry.js',
   '/pantry/views/meals.js',
